@@ -1,0 +1,12 @@
+certifi==2017.11.5
+chardet==3.0.4
+cycler==0.10.0
+idna==2.6
+PyMySQL==0.8.0
+pyparsing==2.2.0
+python-dateutil==2.6.1
+pytz==2017.3
+requests==2.18.4
+six==1.11.0
+Unidecode==1.0.22
+urllib3==1.22
