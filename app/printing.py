@@ -112,7 +112,7 @@ class Print():
         print("____________________________\n")
         i = 0
         for elt in datasFile["Produits"]:
-            print(i, " - ", elt["product_replaced"], " - ", elt["product_name"])
+            print(i, " - ", elt["product_remplace"], " - ", elt["nom_produit"])
     def printDetailProduct(self, dictionary):
         """
         Prints all the elements of the dictionary

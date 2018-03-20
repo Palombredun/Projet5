@@ -92,15 +92,3 @@ class DataBaseManager:
             connection.close()
         return result
 
-    def dropDatabase(self):
-        connection = pymysql.connect(host='localhost', 
-                                    user='root', 
-                                    password='123', 
-                                    charset='utf8',
-                                    cursorclass=pymysql.cursors.DictCursor)
-        try:
-            with connection.cursor() as cursor:
-                cursor.execute("""DROP DATABASE IF EXISTS PurBeurre""")
-                connection.commit()
-        finally:
-            connection.close()

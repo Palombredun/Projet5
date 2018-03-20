@@ -116,7 +116,7 @@ while is_good:
             print("\n\nVoici les détails du substitut que vous avez choisi : ")
             printing.printListOfDict(dictSubstitute, detail=1)
             # Add a column so the user knows what the substitute replaces
-            dictSubstitute["product_replaced"] = replacedProduct
+            dictSubstitute["product_remplace"] = replacedProduct
             # Open the file datas.json which contains the previous substitutes
             with open('substitutes.json', 'a') as f1:
                 with open('substitutes.json', 'r') as f2:
@@ -127,15 +127,13 @@ while is_good:
                         datas["Produits"] = []
                     with open('substitutes.json', 'w') as f3:
                         datas["Produits"].append(dictSubstitute)
-        dbm.dropDatabase()
-
+                        json.dump(datas, f3, indent=4)
+        print("\n\n")
     elif userChoice == 2:
-        with open("datas.json", "r") as f:
+        with open("substitutes.json", "r") as f:
             datas = json.load(f)
             print("Voici les produits que vous avez choisi de remplacer, avec leur substitut : ")
             printing.printJSON(datas)
-            print("Pour afficher le détail d'un produit, entrez son numéro,")
-            userInput = input("pour quitter, tapez Q")
 
             if userInput.lower() == 'q':
                 break
