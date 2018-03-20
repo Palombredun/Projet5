@@ -108,16 +108,8 @@ class Print():
         """
         Prints the name of the product replaced and its substitute
         """
-        print("id  -  Aliment  -  Substitut")
+        print("Aliment  -  Substitut")
         print("____________________________\n")
         i = 0
         for elt in datasFile["Produits"]:
-            print(i, " - ", elt["product_remplace"], " - ", elt["nom_produit"])
-    def printDetailProduct(self, dictionary):
-        """
-        Prints all the elements of the dictionary
-        """
-        for elt in dictionary["Produit"]:
-            for key in elt:
-                print(key,' :')
-                print("\t",elt[key])
+            print(elt["product_remplace"], " - ", elt["nom_produit"])

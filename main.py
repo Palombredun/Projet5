@@ -134,16 +134,3 @@ while is_good:
             datas = json.load(f)
             print("Voici les produits que vous avez choisi de remplacer, avec leur substitut : ")
             printing.printJSON(datas)
-
-            if userInput.lower() == 'q':
-                break
-            try:
-                userInput = int(userInput)
-                if userInput in range(len(datas["Produits"])):
-                    printing.printDetailDict(datas["Produits"][userInput])
-            except:
-                print("Veuillez entrer un numéro valide ou quitter.")
-
-        userInput = input("Entrez Q pour quitter")
-        if userInput.lower() == 'q':
-            break
