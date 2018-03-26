@@ -4,20 +4,18 @@
 # Project for the start-up Pur Beurre.
 
 import json
-from app import constants
-from app import interactions
+from app import choice
 from app import databasemanager
 from app import printing
 
 
-print("Bienvenue sur l'application de Pur Beurre")
+print("\n\nBienvenue sur l'application de Pur Beurre")
 print("Vous pourrez ici choisir des aliments plus sains\n\
 et consulter ceux que vous avez déjà remplacés.\n")
 
 is_good = 1
 # Instanciation of the classes :
 category = interactions.Interactions(3)
-cst = constants.Constants()
 printing = printing.Print()
 
 
@@ -36,6 +34,7 @@ while is_good:
     except:
         print("Entrez 1 ou 2 pour faire votre choix.")
 
+
     if userChoice == 1:
         # Begin by printing the 20 biggest categories :
         printing.printList(cst.CATEGORIES)
@@ -43,7 +42,8 @@ while is_good:
         categoryNumber = printing.chooseCategory()
         categoryName = cst.CATEGORIES[categoryNumber]
 
-        # The user chooses up to 4 times a subcategory :
+
+        # The user chooses up to 3 times a subcategory :
         for i in range(category.loopNumber):
             # Get the subcategories :
             listCategories = []
@@ -57,8 +57,9 @@ while is_good:
             categoryNumber = printing.chooseCategory()
             categoryName = listCategories[categoryNumber]
 
+
         # Get the products from the last category chosen by the user :
-        listJSON = category.getJSON(categoryName)
+        listJSON = category.getProducts(categoryName)
         # Insert these products into the database
         dbm.sql = "INSERT INTO `Aliments` \
             (`id_produit`, `nom_produit`, `score_nutritionnel`, \
@@ -72,6 +73,7 @@ while is_good:
         print("Voici les aliments appartenant à la catégorie que vous avez sélectionné :")
         printing.printListOfDict(resultList)
 
+
         # The user now chooses the product to replace :
         idReplacedProduct = input("\nEntrez le numéro du produit que vous souhaitez remplacer : ")            
         try:
@@ -79,6 +81,7 @@ while is_good:
         except:
             print("Entrez un numéro valide")
         replacedProduct = resultList[idReplacedProduct]['nom_produit'] # this will be useful later
+
 
         # Select all products with a better nutritional score :
         dbm.sql = "SELECT * FROM `Aliments` WHERE `score_nutritionnel` > %s"
@@ -100,6 +103,7 @@ while is_good:
             print("\nVoici les aliments meilleurs pour la santé",\
                 "que celui que vous avez sélectionné :", sep="\n")
             printing.printListOfDict(resultList)
+
 
         # Ask the user to chose a substitute (if he wants one) :
         print("Si vous souhaitez sauvegardez un substitut, entrez son numéro.")
@@ -128,9 +132,49 @@ while is_good:
                     with open('substitutes.json', 'w') as f3:
                         datas["Produits"].append(dictSubstitute)
                         json.dump(datas, f3, indent=4)
-        print("\n\n")
+    
+
     elif userChoice == 2:
         with open("substitutes.json", "r") as f:
             datas = json.load(f)
             print("Voici les produits que vous avez choisi de remplacer, avec leur substitut : ")
             printing.printJSON(datas)
+
+
+loop = 1
+
+while loop:
+    print("\n1 - Choisissez un aliment à remplacer")
+    print("2 - Consulter les aliments précédemments remplacés")
+    print("Enfin, tapez Q pour quitter.")
+
+    userChoice = input()
+
+    if userChoice.lower() == 'q':
+        break
+    try:
+        userChoice = int(userChoice)
+        if userChoice not in (1,2):
+            print("Entrez 1 ou 2")
+    except:
+        print("Veuillez entrer un choix valide.")
+
+    if userChoice == 1:
+        
+        # choice
+        while choice.loopCounter < choice.loopNumber:
+            choice.listCategories = choice.getCategory(choice.categoryName)
+            printing.printList(choice.listCategories)
+            userChoice = input("Veuillez choisir une catégorie : ")
+            try:
+                userChoice = int(userChoice)
+                if userChoice in range(1,21):
+                    pass
+            except:
+                print("Veuillez entrer un numéro valide")
+            choice.categoryName = choice.listCategories[userChoice]
+                
+        #check validity of the user choice
+        #get the 20 first sub categories
+        #print them
+        #user choice
