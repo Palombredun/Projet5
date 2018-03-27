@@ -15,25 +15,32 @@ class DataBaseManager:
         try:
             # Creation of the Database
             with connection.cursor() as cursor:
-                cursor.execute("""DROP DATABASE IF EXISTS PurBeurre""")
+                #cursor.execute("""DROP DATABASE IF EXISTS PurBeurre""")
+                #connection.commit()
+                sql = "show databases like 'PurBeurre'"
+                cursor.execute(sql)
                 connection.commit()
-                cursor.execute("""CREATE DATABASE IF NOT EXISTS PurBeurre""")
-                connection.commit()
-                cursor.execute("""USE PurBeurre""")
-                connection.commit()
-            # Creation of the Tables
-                cursor.execute("""CREATE TABLE IF NOT EXISTS Aliments(
-                                id_produit INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-                                nom_produit VARCHAR(80),
-                                score_nutritionnel SMALLINT NOT NULL,
-                                url VARCHAR(200) NOT NULL,
-                                ingredients TEXT NOT NULL,
-                                lieu_achat VARCHAR(100))
-                                ENGINE=INNODB;
-                                """)
-                connection.commit()
+                result = cursor.fetchone()
+                if 'PurBeurre' not in result.values():
+                    cursor.execute("""CREATE DATABASE IF NOT EXISTS PurBeurre;""")
+                    connection.commit()
+                    cursor.execute("""USE PurBeurre""")
+                    connection.commit()
+                # Creation of the Tables
+                    cursor.execute("""CREATE TABLE IF NOT EXISTS Aliments(
+                                    id_produit INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+                                    nom_produit VARCHAR(80),
+                                    score_nutritionnel SMALLINT NOT NULL,
+                                    url VARCHAR(200) NOT NULL,
+                                    ingredients TEXT NOT NULL,
+                                    lieu_achat VARCHAR(100))
+                                    ENGINE=INNODB;
+                                    """)
+                    connection.commit()
         finally:
                 connection.close()
+    
+
     def executeSQL(self, sql, *params):
         self.sql = sql
         connection = pymysql.connect(host='localhost', 
@@ -46,6 +53,7 @@ class DataBaseManager:
                 cursor.execute("""USE PurBeurre""")
                 connection.commit()
                 # if there is no parameter, simply execute the sql command and return the result :
+                
                 if len(list(params)) == 0:
                     cursor.execute(self.sql)
                     connection.commit()
@@ -65,6 +73,7 @@ class DataBaseManager:
                                 product_name = data['products'][j]['product_name']
                                 nutritional_score = data['products'][j]['nutrition_score_debug']
                                 nutritional_score = nutritional_score[-2:]
+                                
                                 try:
                                     nutritional_score = int(nutritional_score)
                                 except:
@@ -72,7 +81,7 @@ class DataBaseManager:
                                 product_url = data['products'][j]['url']
                                 ingredients_text = data['products'][j]['ingredients_text_debug']
                                 ingredients_text = unicodedata.normalize('NFKD', ingredients_text).\
-                                                               encode('ascii', 'ignore').decode()
+                                                                encode('ascii', 'ignore').decode()
                                 purchase_place = data['products'][j]['purchase_places']
                                 j += 1
                                 index += 1

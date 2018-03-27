@@ -161,20 +161,10 @@ while loop:
 
     if userChoice == 1:
         
-        # choice
+        # Categories' choices : 
+        choice.loopCounter = 0
         while choice.loopCounter < choice.loopNumber:
-            choice.listCategories = choice.getCategory(choice.categoryName)
-            printing.printList(choice.listCategories)
-            userChoice = input("Veuillez choisir une catégorie : ")
-            try:
-                userChoice = int(userChoice)
-                if userChoice in range(1,21):
-                    pass
-            except:
-                print("Veuillez entrer un numéro valide")
-            choice.categoryName = choice.listCategories[userChoice]
-                
-        #check validity of the user choice
-        #get the 20 first sub categories
-        #print them
-        #user choice
+            choice.chooseCategory()
+            choice.loopCounter += 1
+        
+        choice.chooseFood(choice.categoryName)

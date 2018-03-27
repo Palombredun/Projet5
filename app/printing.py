@@ -3,14 +3,7 @@
 class Print():
     def __init__(self):
         pass
-    def chooseCategory(self):
-        value = input("Choisissez une catégorie : ")
-        print("")
-        try:
-            value = int(value)
-            return value
-        except:
-            print("Entrez un numéro valide")
+
     def printList(self,list_):
         """
         This function takes a list and prints properly. If there are more
@@ -49,6 +42,10 @@ class Print():
                     page_counter += 1
                 if user_input.lower() == 'q':
                     break
+    def printCategories(self, listCategories):
+        """Prints a list of categories"""
+        for i in range(len(listCategories)):
+            print(i, ' - ', listCategories)
     def printListOfDict(self, listDict_, detail=False):
         """
         This function takes a list of dictionnaries and prints it.
@@ -62,6 +59,7 @@ class Print():
             if len(listDict_) < 21:
                 for i in range(len(listDict_)):
                     print(i, " - ", listDict_[i]['nom_produit'])
+            
             else:
                 page_number = 1 + len(listDict_)//20
                 page_counter = 1
@@ -70,6 +68,7 @@ class Print():
                     print("{} - {}".format(i, listDict_[i]['nom_produit']))
                 print("Page 1/{}".format(page_number))
                 keep_loop_going = 1
+                
                 while keep_loop_going:
                     print("Pour passer à la page suivante, tapez S,")
                     user_input = input("une fois que vous avez fait votre choix, tapez Q\n")
@@ -85,6 +84,8 @@ class Print():
                         page_counter += 1
                     if user_input.lower() == 'q':
                         break
+        
+
         else:
             # The format of this printing is a bit bifferent : on a line
             # is printed the key and on the line below the value.
