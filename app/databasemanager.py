@@ -99,7 +99,7 @@ class DataBaseManager:
                             category_name = data['products'][j]['categories']
                             category_name = unicodedata.normalize('NFKD', category_name).\
                                                            encode('ascii', 'ignore').decode()
-                            purchase_place = data['products'][j]['purchase_places']
+                            purchase_place = data['products'][j]['purchase_place']
                             j += 1
                             # Put the values in a tuple :
                             tupledValues = (index, product_name, nutritional_score, product_url, \

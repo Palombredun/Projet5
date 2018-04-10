@@ -4,6 +4,7 @@
 # Project for the start-up Pur Beurre.
 
 import json
+
 from app import choice
 from app import databasemanager as dbm
 from app import printing
@@ -38,10 +39,10 @@ while loop:
     if userChoice == 1:
         
         # Categories' choices : 
-        choice.loopCounter = 0
-        while choice.loopCounter < choice.loopNumber:
-            choice.chooseCategory()
-            choice.loopCounter += 1
-        
+        choice.chooseCategory()
+
+        # choose food :
         idReplacedProduct = choice.chooseFood(choice.categoryName)
+
+        # choose substitute or not :
         choice.chooseSubstitute(idReplacedProduct)
