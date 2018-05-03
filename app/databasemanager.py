@@ -8,9 +8,14 @@ class DataBaseManager:
     def __init__(self):
         self.sql = ""
 
+        # Get password:
+        with open('mdp.txt', 'r') as file:
+            mdp = file.read()
+        mdp=mdp[:3]
+
         connection = pymysql.connect(host='localhost', 
                                     user='root', 
-                                    password='123', 
+                                    password=mdp, 
                                     charset='utf8',
                                     cursorclass=pymysql.cursors.DictCursor)
         try:
@@ -43,8 +48,8 @@ class DataBaseManager:
                     connection.commit()
 
                     cursor.execute("""CREATE TABLE Substitute(
-                                    id_substitute BIGINT UNSIGNED PRIMARY KEY,
-                                    id_product BIGINT UNSIGNED NOT NULL)
+                                    id_substitute BIGINT UNSIGNED NOT NULL,
+                                    id_product BIGINT UNSIGNED PRIMARY KEY)
                                     ENGINE=INNODB;
                                     """)
                     connection.commit()
@@ -57,13 +62,15 @@ class DataBaseManager:
                                     ADD CONSTRAINT `fk_id_product` FOREIGN KEY (`id_product`)
                                     REFERENCES `Products`(`id_product`)
                                     """)
-                    connection.commit()                                    
+                    connection.commit()                               
         finally:
                 connection.close()
     
-    def executeSQL(self, sql, addProducts=False, compareProducts=False, addSubstitute=False, \
-                    findProduct=False, listProducts=None, tupleCompareProduct=None, \
-                    tupleSubstitue=None, prodToFind=None):
+    def executeSQL(self, sql, addProducts=False, listProducts=None, \
+                              compareProducts=False, tupleCompareProduct=None, \
+                              addSubstitute=False, tupleSubstitute=None, \
+                              findCategory=False, categoryToFind=None,
+                              getSubstitutes=False):
         
         connection = pymysql.connect(host='localhost', 
                                     user='root', 
@@ -76,8 +83,10 @@ class DataBaseManager:
                 connection.commit()
                 
                 if addProducts:
-                    # Get all the elements from listProducts :
-                    for content in listProducts:
+                    listJSON = listProducts[0]
+                    categoryName = listProducts[1]
+                    # Get all the elements from listJSON :
+                    for content in listJSON:
                         data = json.loads(content)
                         j = 0
 
@@ -96,18 +105,17 @@ class DataBaseManager:
                             ingredients_text = data['products'][j]['ingredients_text_debug']
                             ingredients_text = unicodedata.normalize('NFKD', ingredients_text).\
                                                            encode('ascii', 'ignore').decode()
-                            category_name = data['products'][j]['categories']
-                            category_name = unicodedata.normalize('NFKD', category_name).\
-                                                           encode('ascii', 'ignore').decode()
-                            purchase_place = data['products'][j]['purchase_place']
+                            category_name = categoryName
+                            try:
+                                purchase_place = data['products'][j]['purchase_places']
+                            except:
+                                purchase_place = ""
                             j += 1
                             # Put the values in a tuple :
                             tupledValues = (index, product_name, nutritional_score, product_url, \
-                                    ingredients_text, purchase_place)                                
-                            cursor.execute(self.sql, tupledValues)
+                                    ingredients_text, category_name, purchase_place)                                
+                            cursor.execute(sql, tupledValues)
                             connection.commit()
-                            result = cursor.fetchall()
-                            return result
                 
                 elif compareProducts:
                     cursor.execute(sql, tupleCompareProduct)
@@ -116,12 +124,17 @@ class DataBaseManager:
                     return result
                 
                 elif addSubstitute:
-                    cursor.execute(sql, tupleSubstitue)
+                    cursor.execute(sql, tupleSubstitute)
                     connection.commit()
 
-                elif findProduct:
-                    findProduct = (findProduct,)
-                    cursor.execute(sql, findProduct)
+                elif findCategory:
+                    cursor.execute(sql, categoryToFind)
+                    connection.commit()
+                    result = cursor.fetchall()
+                    return result
+
+                elif getSubstitutes:
+                    cursor.execute(sql)
                     connection.commit()
                     result = cursor.fetchall()
                     return result

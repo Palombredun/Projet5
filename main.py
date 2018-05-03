@@ -16,7 +16,7 @@ et consulter ceux que vous avez déjà remplacés.\n")
 
 is_good = 1
 # Instanciation of the classes :
-choice = choice.Choice(4)
+choice = choice.Choice()
 
 
 loop = True
@@ -25,7 +25,7 @@ while loop:
     print("\n1 - Choisissez un aliment à remplacer")
     print("2 - Consulter les aliments précédemments remplacés")
     print("Pour quitter, tapez Q.")
-    userChoice = input()
+    userChoice = input("Votre choix : ")
 
     if userChoice.lower() == 'q':
         break
@@ -44,5 +44,12 @@ while loop:
         # choose food :
         idReplacedProduct = choice.chooseFood(choice.categoryName)
 
+        if idReplacedProduct == 1:
+            break
+
         # choose substitute or not :
         choice.chooseSubstitute(idReplacedProduct)
+
+    elif userChoice == 2:
+        choice.getDetails()
+        pass
