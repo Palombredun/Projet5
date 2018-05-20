@@ -102,7 +102,7 @@ class Choice:
 
         # Verify that this product hasn't already been replaced :
         self.dbm.sql = "SELECT * FROM `Products` WHERE `id_product` = %s"
-        result = self.executeSQL(self.dbm.sql, idReplacedProduct)
+        result = self.dbm.executeSQL(self.dbm.sql, findCategory=True, categoryToFind=idReplacedProduct)
         if len(result) == 0:
             print("Vous avez déjà cherché un substitut pour cet aliment.")
             return 1

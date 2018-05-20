@@ -57,10 +57,8 @@ class Print():
             # is printed the key and on the line below the value.
             # for the ingredients (which we know are separated by a comma),
             # we do a carriage return for more clarity.
-            if type(listDict_) is dict():
-                elements = listDict_[0]
-            else:
-                elements = listDict_
+            
+            elements = listDict_[0]
                 
             print("Nom du produit : ", elements['product_name'])
             print("Code : ", elements['id_product'])
